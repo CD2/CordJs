@@ -1,0 +1,11 @@
+{
+  "name": "cord",
+  "version": "1.0.0",
+  "description": "connects react components to a cord compliant api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Henry Morgan",
+  "license": "ISC"
+}
