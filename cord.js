@@ -1,61 +1,20 @@
+import React from 'react'
+import connectIds from './connections/ids'
+import connectIdFetcher from './connections/id_fetcher'
+import connectRecord from './connections/record'
 
+export default class Cord {
 
-class Cord {
-
-  static IdsClass = require('./ids').default
-
-  constructor(name, {options}={}) {
+  constructor(name, { path, table_name, prop, as }={}) {
     this.name = name
-    this.names = {
-      reducer_key: name,
-    }
+    this.path = (path !== undefined) ? path : name
+    this.table_name = (table_name !== undefined) ? table_name : name
+    this.defaultAs = (as !== undefined) ? as : name
+    this.defaultPropName = (prop !== undefined) ? prop : `${name}_id`
   }
 
-  //STORE STUFF
-
-  setupStore(cordStore) {
-    this._cordStore = cordStore
-  }
-
-  cordStore() {
-    if (this._cordStore === undefined) {
-      throw new Error(`Cord(${this.name}) can not be used outside of a cord store. You likely forgot to call \`register\` on the CordStore`)
-    }
-    return this._cordStore
-  }
-
-  getState(...args) {
-    return this.cordStore().getState(...args)
-  }
-
-  dispatch(...args) {
-    return this.cordStore().dispatch(...args)
-  }
-
-  //
-
-
-  ids(state) {
-    state = state['cord'][this.name]['ids']
-    return new Cord.IdsClass(this, state)
-  }
-
-  //DSL
-  action_for(name, callback=(execute, params)=>execute(params)) {
-    const execute = () => {
-      this.request().post(`perform/${name}`)
-    }
-
-
-  }
-
+  connectIds = connectIds
+  connectIdFetcher = connectIdFetcher
+  connectRecord = connectRecord
 
 }
-
-import connections_methods from './connections'
-
-Object.entries(connections_methods).forEach(([name, callback]) => {
-  Cord.prototype[name] = callback
-})
-
-export default Cord
